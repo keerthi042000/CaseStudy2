@@ -21,7 +21,7 @@ fi
 
 cd ~/projects
 python3 -m venv CaseStudy2_venv
-source python3 -m venv CaseStudy2_venv/bin/activate
+source ~/projects/CaseStudy2_venv/bin/activate
 
 export HF_TOKEN="$HUGGINGFACE_TOKEN"
 
