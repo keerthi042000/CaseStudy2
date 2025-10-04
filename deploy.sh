@@ -12,8 +12,8 @@ else
 fi
 
 cd ~/projects
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv CaseStudy2_venv
+source python3 -m venv CaseStudy2_venv /bin/activate
 
 pip install --upgrade pip
 pip install -r ~/projects/CaseStudy2/requirements.txt
