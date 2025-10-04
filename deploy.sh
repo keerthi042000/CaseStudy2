@@ -5,10 +5,10 @@ sudo apt update
 sudo apt install -y libgl1-mesa-glx
 
 cd ~/projects/
-if [ -d "Image_upscaling" ]; then
-    cd Image_upscaling && git pull origin main
+if [ -d "CaseStudy2" ]; then
+    cd CaseStudy2 && git pull origin main
 else
-    git clone https://github.com/harikp196/Image_upscaling.git
+    git clone https://github.com/keerthi042000/CaseStudy2.git
 fi
 
 cd ~/projects
@@ -16,6 +16,6 @@ python3 -m venv venv
 source venv/bin/activate
 
 pip install --upgrade pip
-pip install -r ~/projects/Image_upscaling/requirements.txt
+pip install -r ~/projects/CaseStudy2/requirements.txt
 
-nohup python3 ~/projects/Image_upscaling/app.py > ~/projects/project1.log 2>&1 &
+nohup python3 ~/projects/CaseStudy2/app.py > ~/projects/CaseStudy2.log 2>&1 &
