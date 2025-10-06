@@ -21,6 +21,7 @@ PUBLIC_KEYS=(
 "$HOME/.ssh/CaseStudy2_16.pub"
 "$HOME/.ssh/CaseStudy2_16_Keerthi.pub"
 "$HOME/.ssh/CaseStudy2_16_GG.pub"
+"$HOME/.ssh/CaseStudy2_16_HP.pub"
 )
 
 echo "$(date): Starting cron recovery..." >> "$LOG_FILE"
@@ -60,7 +61,8 @@ else
         ssh -i "$DEFAULT_KEY" -p $VM_PORT $VM_USER@$VM_HOST "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat > ~/.ssh/authorized_keys <<'EOF'
 $(cat "$HOME/.ssh/CaseStudy2_16.pub")
 $(cat "$HOME/.ssh/CaseStudy2_16_Keerthi.pub")
-$(cat "$HOME/.ssh/CaseStudy2_16_GG.pub")"
+$(cat "$HOME/.ssh/CaseStudy2_16_GG.pub")
+$(cat "$HOME/.ssh/CaseStudy2_16_HP.pub")"
 
 
         ssh -i "$CUSTOM_KEY" -p $VM_PORT $VM_USER@$VM_HOST 'chmod 600 ~/.ssh/authorized_keys'
