@@ -13,8 +13,8 @@ VM_HOST="paffenroth-23.dyn.wpi.edu"
 VM_PORT=22016
 DEPLOY_SCRIPT_URL="https://raw.githubusercontent.com/keerthi042000/CaseStudy2/main/deploy.sh"
 CUSTOM_KEY="$HOME/.ssh/CaseStudy2_16"
-DEFAULT_KEY="$HOME/MLOPS_CaseStudy2/student-admin_key"
-LOG_FILE="$HOME/MLOPS_CaseStudy2/cron_recovery.log"
+DEFAULT_KEY="$HOME/.ssh/student-admin_key"
+LOG_FILE="$HOME/MLOPS/CaseStudy2/cron_recovery.log"
 
 # List of public keys to allow access (add your teammates' public keys)
 PUBLIC_KEYS=(
@@ -46,19 +46,29 @@ else
     if ssh -i "$DEFAULT_KEY" -p $VM_PORT -o ConnectTimeout=10 -o StrictHostKeyChecking=no $VM_USER@$VM_HOST "echo 1" &>/dev/null; then
         echo "$(date): Connected with default key. Updating authorized_keys..." >> "$LOG_FILE"
 
-        ssh -i "$DEFAULT_KEY" -p $VM_PORT $VM_USER@$VM_HOST '
-            mkdir -p ~/.ssh
-            chmod 700 ~/.ssh
-        '
+        # ssh -i "$DEFAULT_KEY" -p $VM_PORT $VM_USER@$VM_HOST '
+        #     mkdir -p ~/.ssh
+        #     chmod 700 ~/.ssh
+        # '
 
-        for pubkey in "${PUBLIC_KEYS[@]}"; do
-            ssh -i "$DEFAULT_KEY" -p $VM_PORT $VM_USER@$VM_HOST "cat >> ~/.ssh/authorized_keys" < "$pubkey"
-        done
+        # for pubkey in "${PUBLIC_KEYS[@]}"; do
+        #     ssh -i "$DEFAULT_KEY" -p $VM_PORT $VM_USER@$VM_HOST "cat >> ~/.ssh/authorized_keys" < "$pubkey"
+        # done
 
-        ssh -i "$DEFAULT_KEY" -p $VM_PORT $VM_USER@$VM_HOST 'chmod 600 ~/.ssh/authorized_keys'
+        # Step 1: Create temp file
+
+        ssh -i "$DEFAULT_KEY" -p $VM_PORT $VM_USER@$VM_HOST "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat > ~/.ssh/authorized_keys <<'EOF'
+$(cat "$HOME/.ssh/CaseStudy2_16.pub")
+$(cat "$HOME/.ssh/CaseStudy2_16_Keerthi.pub")
+$(cat "$HOME/.ssh/CaseStudy2_16_GG.pub")"
+
+
+        ssh -i "$CUSTOM_KEY" -p $VM_PORT $VM_USER@$VM_HOST 'chmod 600 ~/.ssh/authorized_keys'
+
+        # ssh -i "$DEFAULT_KEY" -p $VM_PORT $VM_USER@$VM_HOST 'chmod 600 ~/.ssh/authorized_keys'
 
         echo "$(date): Redeploying app..." >> "$LOG_FILE"
-        ssh -i "$DEFAULT_KEY" -p $VM_PORT $VM_USER@$VM_HOST "
+        ssh -i "$CUSTOM_KEY" -p $VM_PORT $VM_USER@$VM_HOST "
             curl -s -L $DEPLOY_SCRIPT_URL -o ~/deploy.sh
             bash ~/deploy.sh $HF_TOKEN
         "
